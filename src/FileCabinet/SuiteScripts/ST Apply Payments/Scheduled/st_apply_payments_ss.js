@@ -7,17 +7,23 @@ define(['N/record', 'N/search', 'N/runtime'],
 
     function (record, search, runtime) {
 
-        const ACCOUNT_ID_UK_USD = '1377';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_UK_EUR = '1378';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_UK_GBP = '1379';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_US = '1380';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_CA = '1381';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_USD = '1430';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_EUR = '1429';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_GBP = '1428';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_US = '1431';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_CA = '1432';  //Bank for closing old transactions bank account for processing
+
 
 
         function execute(context) {
 
             var transCount = 0
             var scriptObj = runtime.getCurrentScript();
+            // Create a JavaScript Date object for April 1, 2023
+            var tranDate = new Date(2023, 3, 1); // Note: Months are zero-based, so 3 represents April
+
+
+
 
             // Load search
             var invoiceSearchObj = search.load({
@@ -48,8 +54,8 @@ define(['N/record', 'N/search', 'N/runtime'],
 
 
                 //Set Bank Account by Subsidiary
-                var subsidiaryID = customerPayment.getValue('subsidiary')
-                log.debug('subsidiaryID : '+subsidiaryID)
+                var subsidiaryID    = customerPayment.getValue('subsidiary')
+                log.debug('subsidiaryID : '+subsidiaryID+ ' tranDate '+tranDate )
 
                 if(subsidiaryID == 6){ //Nexsan UK
                     var transCurrency = customerPayment.getText('currency')
@@ -71,6 +77,7 @@ define(['N/record', 'N/search', 'N/runtime'],
 
                 // Set header values
                 customerPayment.setValue('account', account_id);
+                customerPayment.setValue('trandate', tranDate);
                 customerPayment.setValue('memo', 'Autogenerate payment to close old invoices');
 
                 var lineCount = customerPayment.getLineCount({

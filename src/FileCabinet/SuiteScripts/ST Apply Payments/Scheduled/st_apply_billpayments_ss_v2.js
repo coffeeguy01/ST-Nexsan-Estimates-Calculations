@@ -8,16 +8,18 @@ define(['N/record', 'N/search'],
     function (record, search) {
 
 
-        const ACCOUNT_ID_UK_USD = '1377';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_UK_EUR = '1378';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_UK_GBP = '1379';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_US = '1380';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_CA = '1381';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_USD = '1430';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_EUR = '1429';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_GBP = '1428';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_US = '1431';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_CA = '1432';  //Bank for closing old transactions bank account for processing
 
 
         function execute(context) {
 
             var transCount = 0;
+            // Create a JavaScript Date object for April 1, 2023
+            var tranDate = new Date(2023, 3, 1); // Note: Months are zero-based, so 3 represents April
 
             // Load search
             var invoiceSearchObj = search.load({
@@ -77,6 +79,7 @@ define(['N/record', 'N/search'],
                     // Set header values
                     billPayment.setValue('currency', invoiceCur);
                     billPayment.setValue('account', account_id);
+                    billPayment.setValue('trandate', tranDate);
                     billPayment.setValue('memo', 'Autogenerate payment to close old invoices');
 
                     var lineCount = billPayment.getLineCount({
@@ -104,7 +107,7 @@ define(['N/record', 'N/search'],
                             });
                         }
 
-                       // log.debug('billPayment before Save' + cpId, JSON.stringify(billPayment));
+                       log.debug('billPayment before Save' + cpId, JSON.stringify(billPayment));
 
                         var cpId = billPayment.save({
                             enableSourcing: true,
@@ -113,7 +116,7 @@ define(['N/record', 'N/search'],
 
                         transCount += 1;
 
-                        log.audit(transCount + ' Created Vendor Payment ID: ' + cpId + ' for Invoice: ' + invoiceId);
+                        log.audit(transCount + 'traansactions processed. Created Vendor Payment ID: ' + cpId + ' for Invoice: ' + invoiceId);
                     }
                 } catch (ex) {
                     log.error('Error processing invoice ' + invoiceId + ': ', ex);
