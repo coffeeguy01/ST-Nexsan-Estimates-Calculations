@@ -4,6 +4,7 @@
   <dependencies>
     <features>
       <feature required="true">SERVERSIDESCRIPTING</feature>
+      <feature required="true">WORKFLOW</feature>
     </features>
   </dependencies>
 </manifest>

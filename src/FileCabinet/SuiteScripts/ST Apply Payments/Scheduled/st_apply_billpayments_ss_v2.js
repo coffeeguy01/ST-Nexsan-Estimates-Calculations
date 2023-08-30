@@ -7,7 +7,13 @@ define(['N/record', 'N/search'],
 
     function (record, search) {
 
-        const ACCOUNT_ID = '1413';  //Bank for closing old transactions bank account for processing
+
+        const ACCOUNT_ID_UK_USD = '1377';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_EUR = '1378';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_GBP = '1379';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_US = '1380';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_CA = '1381';  //Bank for closing old transactions bank account for processing
+
 
         function execute(context) {
 
@@ -43,9 +49,34 @@ define(['N/record', 'N/search'],
                         isDynamic: true,
                     });
 
+
+                    //set bank account based on subsidiary
+                    var subsidiaryID = billPayment.getValue('subsidiary')
+                    log.debug('subsidiaryID : '+subsidiaryID)
+
+
+                    if(subsidiaryID == 6){ //Nexsan UK
+                        var transCurrency = billPayment.getText('currency')
+                        log.debug('transCurrency : '+transCurrency)
+                        if(transCurrency == 'EUR'){
+                            account_id = ACCOUNT_ID_UK_EUR
+                        } else if (transCurrency == 'USD'){
+                            account_id = ACCOUNT_ID_UK_USD
+                        } else if (transCurrency == 'GBP'){
+                            account_id = ACCOUNT_ID_UK_GBP
+                        }
+
+                    } else if (subsidiaryID == 7) { //Nexsan USA
+
+                        account_id = ACCOUNT_ID_US
+                    } else if (subsidiaryID == 5) { //Nexsan CA
+                        account_id = ACCOUNT_ID_CA
+                    }
+
+
                     // Set header values
                     billPayment.setValue('currency', invoiceCur);
-                    billPayment.setValue('account', ACCOUNT_ID);
+                    billPayment.setValue('account', account_id);
                     billPayment.setValue('memo', 'Autogenerate payment to close old invoices');
 
                     var lineCount = billPayment.getLineCount({
@@ -73,7 +104,7 @@ define(['N/record', 'N/search'],
                             });
                         }
 
-                        log.debug('billPayment before Save' + cpId, JSON.stringify(billPayment));
+                       // log.debug('billPayment before Save' + cpId, JSON.stringify(billPayment));
 
                         var cpId = billPayment.save({
                             enableSourcing: true,
