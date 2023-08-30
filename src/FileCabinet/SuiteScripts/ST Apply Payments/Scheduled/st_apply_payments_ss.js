@@ -8,10 +8,11 @@ define(['N/record', 'N/search', 'N/runtime'],
     function (record, search, runtime) {
 
         const ACCOUNT_ID_UK_USD = '1430';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_UK_EUR = '1429';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_UK_GBP = '1428';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_US = '1431';  //Bank for closing old transactions bank account for processing
-        const ACCOUNT_ID_CA = '1432';  //Bank for closing old transactions bank account for processing
+        const ACCOUNT_ID_UK_EUR = '1429';
+        const ACCOUNT_ID_UK_GBP = '1428';
+        const ACCOUNT_ID_US = '1431';
+        const ACCOUNT_ID_CA = '1432';
+        const ACCOUNT_ID_RETRO = '1433';
 
 
 
@@ -25,7 +26,7 @@ define(['N/record', 'N/search', 'N/runtime'],
 
 
 
-            // Load search
+            // Load search - ST Transactions for Closing (Invoices)
             var invoiceSearchObj = search.load({
                 id: "customsearch_st_apply_open_invoices"
             });
@@ -73,7 +74,10 @@ define(['N/record', 'N/search', 'N/runtime'],
                     account_id = ACCOUNT_ID_US
                 } else if (subsidiaryID == 5) { //Nexsan CA
                     account_id = ACCOUNT_ID_CA
-                }
+                } else if (subsidiaryID == 10) { //Retrospect
+                    account_id = ACCOUNT_ID_RETRO
+
+
 
                 // Set header values
                 customerPayment.setValue('account', account_id);
