@@ -24,13 +24,13 @@ define(['N/record', 'N/search', 'N/runtime'],
             var tranDate = new Date(2023, 3, 1); // Note: Months are zero-based, so 3 represents April
 
 
-
+            log.debug('Prepare to load search')
 
             // Load search - ST Transactions for Closing (Invoices)
             var invoiceSearchObj = search.load({
                 id: "customsearch_st_apply_open_invoices"
             });
-
+            log.debug('search loaded')
             var searchResultCount = invoiceSearchObj.runPaged().count;
             log.debug("invoiceSearchObj result count", searchResultCount);
             if (searchResultCount == 0){
@@ -76,7 +76,7 @@ define(['N/record', 'N/search', 'N/runtime'],
                     account_id = ACCOUNT_ID_CA
                 } else if (subsidiaryID == 10) { //Retrospect
                     account_id = ACCOUNT_ID_RETRO
-
+                }
 
 
                 // Set header values
